@@ -20,15 +20,17 @@ pipeline {
         }
         stage('Docker Deploy K8s'){
             steps{
+	    	sh "chmod +x changeTag.sh"
+		sh "./dockerTag.sh ${DOCKER_TAG}"
 
-                sshagent(['tomcat-dev']) {
-                    withCredentials([string(credentialsId: 'nexus-pwd', variable: 'nexusPwd')]) {
-                        sh "ssh ec2-user@172.31.0.38 docker login -u admin -p ${nexusPwd} ${NEXUS_URL}"
-                    }
-					// Remove existing container, if container name does not exists still proceed with the build
-					sh script: "ssh ec2-user@172.31.0.38 docker rm -f nodeapp",  returnStatus: true
+                sshagent(['minikube-server']) {
                     
-                    sh "ssh ec2-user@172.31.0.38 docker run -d -p 8080:8080 --name nodeapp ${IMAGE_URL_WITH_TAG}"
+                    sh "scp -o StrictHostKeyChecking=no service.yaml node-app-pod.yaml ec2-user@34.229.192.91:/home/ec2-user"
+		    sh "ssh ec2-user@34.229.192.91 docker login -u amitdevops12 -p ${docker-hubPwd}"
+		    sh "ssh ec2-user@34.229.192.91 kubectl apply -f /home/ec2-user/node-app-pod.yaml"
+		    sh "ssh ec2-user@34.229.192.91 kubectl apply -f /home/ec2-user/service.yaml"
+
+				
                 }
             }
         }
