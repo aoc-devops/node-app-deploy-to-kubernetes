@@ -2,25 +2,25 @@ pipeline {
     agent any
     environment{
         DOCKER_TAG = getDockerTag()
-        NEXUS_URL  = "172.31.34.232:8080"
-        IMAGE_URL_WITH_TAG = "${NEXUS_URL}/node-app:${DOCKER_TAG}"
+
     }
     stages{
         stage('Build Docker Image'){
             steps{
-                sh "docker build . -t ${IMAGE_URL_WITH_TAG}"
+                sh "docker build . -t amitdevops12/node-app:${DOCKER_TAG}"
             }
         }
-        stage('Nexus Push'){
+        stage('Docker Hub Push'){
             steps{
-                withCredentials([string(credentialsId: 'nexus-pwd', variable: 'nexusPwd')]) {
-                    sh "docker login -u admin -p ${nexusPwd} ${NEXUS_URL}"
-                    sh "docker push ${IMAGE_URL_WITH_TAG}"
+                withCredentials([string(credentialsId: 'docker-hub', variable: 'docker-hubPwd')]) {
+                    sh "docker login -u amitdevops12 -p ${docker-hubPwd}"
+                    sh "docker push amitdevops12/node-app:${DOCKER_TAG}"
                 }
             }
         }
-        stage('Docker Deploy Dev'){
+        stage('Docker Deploy K8s'){
             steps{
+
                 sshagent(['tomcat-dev']) {
                     withCredentials([string(credentialsId: 'nexus-pwd', variable: 'nexusPwd')]) {
                         sh "ssh ec2-user@172.31.0.38 docker login -u admin -p ${nexusPwd} ${NEXUS_URL}"
