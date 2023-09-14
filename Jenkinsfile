@@ -25,7 +25,7 @@ pipeline {
 		        sh "./changeTag.sh ${DOCKER_TAG}"
 
                 sshagent(['public-all1']) {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'public-all1', keyFileVariable: 'SSH_KEY_MINIKUBE_SERVER')]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'public-all1', keyFileVariable: 'SSH_KEY_MINIKUBE_SERVER',  usernameVariable: 'ec2-user')]) {
                         sh "scp -o StrictHostKeyChecking=no service.yaml node-app-pod.yaml ec2-user@${KUBECTL_HOST_IP}:/home/ec2-user"
 		                sh "ssh ec2-user@${KUBECTL_HOST_IP} docker login -u amitdevops12 -p ${docker-hubPwd}"
 		                sh "ssh ec2-user@${KUBECTL_HOST_IP} kubectl apply -f /home/ec2-user/node-app-pod.yaml"
