@@ -10,13 +10,13 @@ WORKDIR /usr/src/app
 # where available (npm@5+)
 
 
-RUN npm install
+
 # If you are building your code for production
 # RUN npm install --only=production
 
 # Bundle app source
 
 EXPOSE 8080
-CMD [ "npm", "start" ]
+
 
 # This is dummy change for git demo
