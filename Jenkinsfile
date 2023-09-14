@@ -24,7 +24,7 @@ pipeline {
 	    	    sh "chmod +x changeTag.sh"
 		        sh "./changeTag.sh ${DOCKER_TAG}"
 
-                sshagent(['minikube-server']) {
+                sshagent(['public-all1']) {
                     withCredentials([sshUserPrivateKey(credentialsId: 'public-all1', keyFileVariable: 'SSH_KEY_MINIKUBE_SERVER')]) {
                     
                         sh "scp -o StrictHostKeyChecking=no service.yaml node-app-pod.yaml ec2-user@34.229.192.91:/home/ec2-user"
