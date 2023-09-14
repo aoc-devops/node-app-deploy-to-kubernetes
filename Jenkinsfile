@@ -20,6 +20,7 @@ pipeline {
         }
         stage('Docker Deploy K8s'){
             steps{
+                sh "pwd"
 	    	    sh "chmod +x changeTag.sh"
 		        sh "./changeTag.sh ${DOCKER_TAG}"
 
