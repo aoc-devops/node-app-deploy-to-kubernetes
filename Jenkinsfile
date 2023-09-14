@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    environment{
+    environment {
         DOCKER_TAG = getDockerTag()
         KUBECTL_HOST_IP = "54.81.162.182"
 
@@ -31,7 +31,7 @@ pipeline {
 		                sh "ssh ec2-user@${KUBECTL_HOST_IP} docker login -u amitdevops12 -p ${docker-hubPwd}"
 		                sh "ssh ec2-user@${KUBECTL_HOST_IP} kubectl apply -f /home/ec2-user/node-app-pod.yaml"
 		                sh "ssh ec2-user@${KUBECTL_HOST_IP} kubectl apply -f /home/ec2-user/service.yaml"
-
+                    }
 				
                 }
             }
