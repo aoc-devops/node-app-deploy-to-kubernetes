@@ -28,8 +28,8 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'public-all1', keyFileVariable: 'SSH_KEY_FOR_MINIKUBESERVER', passphraseVariable: '',  usernameVariable: 'ec2-user')]) {
                         sh "scp -o StrictHostKeyChecking=no service.yml node-app-pod.yml ec2-user@${KUBECTL_HOST_IP}:/home/ec2-user"
 		                sh "ssh ec2-user@${KUBECTL_HOST_IP} docker login -u amitdevops12 -p Amit@4292"
-		                sh "ssh ec2-user@${KUBECTL_HOST_IP} kubectl apply -f /home/ec2-user/node-app-pod.yaml"
-		                sh "ssh ec2-user@${KUBECTL_HOST_IP} kubectl apply -f /home/ec2-user/service.yaml"
+		                sh "ssh ec2-user@${KUBECTL_HOST_IP} kubectl apply -f /home/ec2-user/node-app-pod.yml"
+		                sh "ssh ec2-user@${KUBECTL_HOST_IP} kubectl apply -f /home/ec2-user/service.yml"
                     }
                     
                 }
